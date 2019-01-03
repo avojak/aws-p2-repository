@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head"></head>
+
+<body class="bg-light">
+
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<div th:replace="fragments/navbar :: nav-scroller"></div>
+
+<main role="main" class="container">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-gray rounded box-shadow">
+        <img class="mr-3" alt="" width="48" height="48" th:if="${brandIcon != ''}" th:src="@{${brandIcon}}">
+        <div class="lh-100">
+            <h6 class="mb-0 text-white lh-100" th:text="${welcomeMessage}"></h6>
+            <span th:switch="${projectCount}">
+                <small th:case="'0'" th:text="'No hosted projects'"></small>
+                <small th:case="'1'" th:text="'Hosting ' + ${projectCount} + ' project'"></small>
+                <small th:case="*" th:text="'Hosting ' + ${projectCount} + ' projects'"></small>
+            </span>
+        </div>
+    </div>
+
+    <div id="content-container">
+    </div>
+
+</main>
+
+
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap-4.1.3.min.js"></script>
+<script src="/js/offcanvas.js"></script>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        showDashboard();
+    });
+
+    function showDashboard(el) {
+        $('#content-container').load('/browse/dashboard');
+        updateActiveNavLink(el);
+    }
+
+    function showProjects(el) {
+        $('#content-container').load('/browse/projects/all');
+        updateActiveNavLink(el);
+    }
+
+    function updateActiveNavLink(el) {
+        if (el) {
+            $('.nav-scroller > .nav > .nav-link').removeClass('active');
+            $(el).addClass('active');
+        }
+    }
+
+    function showProject(name) {
+        $('#content-container').load('/browse/project/' + name);
+    }
+</script>
+
+</body>
+</html>

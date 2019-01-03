@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+<div th:fragment="projectList" id="project-list" class="my-3 p-3 bg-white rounded box-shadow">
+    <h6 class="border-bottom border-gray pb-2 mb-0">All projects</h6>
+
+    <ul class="list-unstyled text-muted pt-3" th:each="project : ${projects}">
+        <li class="media pb-3 mb-3 small lh-125 border-bottom border-gray projects-entry"
+            th:onclick="'javascript:showProject(\'' + ${project.name} + '\');'">
+            <div class="media-body">
+                <span class="d-block pb-1">
+                    <strong class="text-gray-dark pr-2" th:text="${project.name}"></strong>
+                    <span class="badge badge-secondary" th:text="${project.latestVersion?.version}"></span>
+                </span>
+                <p>Hydrogen is an Eclipse plugin to configure and launch one or more H2 database servers.</p>
+                <span th:text="${project.latestVersion?.date}"></span>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
