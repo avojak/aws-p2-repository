@@ -1,0 +1,16 @@
+{
+  "name": "aws-p2-repository",
+  "scripts": {
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "stack": "heroku-18",
+  "buildpacks": [
+
+  ]
+}
