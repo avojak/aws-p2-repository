@@ -14,6 +14,7 @@
         <module>aws-p2-repository-model</module>
         <module>aws-p2-repository-service</module>
         <module>aws-p2-repository-webapp</module>
+        <module>aws-p2-repository-test-report</module>
     </modules>
 
     <parent>
@@ -284,6 +285,48 @@
                         </executions>
                     </plugin>
                 </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <configuration>
+                            <propertyName>jacoco.agent.argLine</propertyName>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default-prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.eluder.coveralls</groupId>
+                            <artifactId>coveralls-maven-plugin</artifactId>
+                            <version>4.3.0</version>
+                            <configuration>
+                                <jacocoReports>
+                                    <jacocoReport>
+                                        ${project.basedir}/aws-p2-repository-test-report/target/site/jacoco-aggregate/jacoco.xml
+                                    </jacocoReport>
+                                </jacocoReports>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>
