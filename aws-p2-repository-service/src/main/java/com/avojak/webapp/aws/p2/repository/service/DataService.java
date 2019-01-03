@@ -5,7 +5,6 @@ import com.avojak.webapp.aws.p2.repository.model.Uptime;
 import com.avojak.webapp.aws.p2.repository.model.project.Project;
 import org.springframework.core.io.Resource;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +23,6 @@ public interface DataService {
 	 */
 	Optional<Resource> getResource(final String key, final String project, final Qualifier qualifier,
 								   final String version);
-
-	/**
-	 * Gets the names of all available projects.
-	 *
-	 * @return The non-null, possibly empty collection of project names.
-	 */
-	Collection<String> getProjectNames();
 
 	/**
 	 * Gets the list of available projects.

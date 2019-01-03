@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -124,18 +122,6 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public Collection<String> getProjectNames() {
-		final List<S3ObjectSummary> summaries = repository.getObjectSummaries("");
-		final Set<String> projects = new TreeSet<>();
-		for (final S3ObjectSummary summary : summaries) {
-			projects.add(summary.getKey().split("/")[0]);
-		}
-		final List<String> projectNames = new ArrayList<>(projects);
-		Collections.sort(projectNames);
-		return projects;
-	}
-
-	@Override
 	public List<Project> getProjects() {
 		final List<S3ObjectSummary> summaries = repository.getObjectSummaries("")
 				.stream()
@@ -187,35 +173,24 @@ public class DataServiceImpl implements DataService {
 				.filter(p -> p.getKey().contains("p2.index"))
 				.collect(Collectors.toList());
 
-		if (summaries.size() == 0) {
-			// TODO: Handle this
-			LOGGER.error("Project not found [%s]", name);
-		}
-		final S3ObjectSummary summary = summaries.get(0);
-		if (summaries.size() > 1) {
-			LOGGER.warn("Found multiple p2.index files for project [%s]", name);
-			for (final S3ObjectSummary s : summaries) {
-				LOGGER.warn("\t%s", s.getKey());
-			}
-			LOGGER.warn("Using first match [%s]", summary.getKey());
-		}
-
 		final List<ProjectVersion> snapshots = new ArrayList<>();
 		final List<ProjectVersion> releases = new ArrayList<>();
 
-		final String[] tokens = summary.getKey().split("/");
-		final Qualifier qualifier = Qualifier.fromPathElement(tokens[1]);
-		final ComparableVersion version = new ComparableVersion(tokens[2]);
+		for (final S3ObjectSummary summary : summaries) {
+			final String[] tokens = summary.getKey().split("/");
+			final Qualifier qualifier = Qualifier.fromPathElement(tokens[1]);
+			final ComparableVersion version = new ComparableVersion(tokens[2]);
 
-		switch (qualifier) {
-			case SNAPSHOT:
-				snapshots.add(new ProjectVersion(version, summary.getLastModified()));
-				break;
-			case RELEASE:
-				releases.add(new ProjectVersion(version, summary.getLastModified()));
-				break;
-			default:
-				throw new IllegalStateException("Unsupported qualifier: " + qualifier.name());
+			switch (qualifier) {
+				case SNAPSHOT:
+					snapshots.add(new ProjectVersion(version, summary.getLastModified()));
+					break;
+				case RELEASE:
+					releases.add(new ProjectVersion(version, summary.getLastModified()));
+					break;
+				default:
+					throw new IllegalStateException("Unsupported qualifier: " + qualifier.name());
+			}
 		}
 
 		return new Project(name, snapshots, releases);

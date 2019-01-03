@@ -90,16 +90,6 @@ public class DataController {
 	}
 
 	/**
-	 * Gets the names of all available projects in the repository.
-	 *
-	 * @return The non-null, possibly empty list of project names.
-	 */
-	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Collection<String>> getProjectNames() {
-		return ResponseEntity.ok().body(service.getProjectNames());
-	}
-
-	/**
 	 * Gets the available projects in the repository.
 	 *
 	 * @return The non-null, possibly empty collection of projects.
