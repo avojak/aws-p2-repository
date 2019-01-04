@@ -1,14 +1,5 @@
 {
   "name": "aws-p2-repository",
-  "scripts": {
-  },
-  "env": {
-  },
-  "formation": {
-  },
-  "addons": [
-  ],
-  "stack": "heroku-18",
-  "buildpacks": [
-  ]
+  "description": "Web application to host p2 repositories backed by AWS",
+  "addons": []
 }
