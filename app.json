@@ -1,5 +1,22 @@
 {
   "name": "aws-p2-repository",
   "description": "Web application to host p2 repositories backed by AWS",
+  "env": {
+    "AWS_S3_BUCKET_NAME": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_BRAND_NAME": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_BRAND_ICON": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_BRAND_FAVICON": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_CUSTOM_DOMAIN": {
+      "required": true
+    }
+  },
   "addons": []
 }
