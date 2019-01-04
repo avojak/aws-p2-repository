@@ -2,6 +2,12 @@
   "name": "aws-p2-repository",
   "description": "Web application to host p2 repositories backed by AWS",
   "env": {
+    "AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_ACCESS_SECRET_KEY": {
+      "required": true
+    },
     "AWS_S3_BUCKET_NAME": {
       "required": true
     },
