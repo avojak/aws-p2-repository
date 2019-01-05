@@ -18,6 +18,12 @@ public interface DataService {
 	 *
 	 * @param key
 	 * 		The key of the resource. Cannot be null or empty.
+	 * @param project
+	 * 		The project name. Cannot be null or empty.
+	 * @param qualifier
+	 * 		The version {@link Qualifier}. Cannot be null.
+	 * @param version
+	 * 		The version. Cannot be null or empty.
 	 *
 	 * @return The {@link Optional} of the {@link Resource}.
 	 */
@@ -37,7 +43,7 @@ public interface DataService {
 	 * @param name
 	 * 		The project name. Cannot be null or empty.
 	 *
-	 * @return The non-null {@lnk Optional} of the {@link Project}.
+	 * @return The non-null {@link Optional} of the {@link Project}.
 	 */
 	Optional<Project> getProject(final String name);
 
