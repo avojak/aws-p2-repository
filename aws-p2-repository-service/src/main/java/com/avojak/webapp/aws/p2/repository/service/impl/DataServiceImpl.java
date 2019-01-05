@@ -1,14 +1,12 @@
 package com.avojak.webapp.aws.p2.repository.service.impl;
 
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.avojak.webapp.aws.p2.repository.dataaccess.repository.S3BucketRepository;
 import com.avojak.webapp.aws.p2.repository.model.Qualifier;
 import com.avojak.webapp.aws.p2.repository.model.Uptime;
 import com.avojak.webapp.aws.p2.repository.model.project.Project;
-import com.avojak.webapp.aws.p2.repository.model.project.ProjectVersion;
 import com.avojak.webapp.aws.p2.repository.service.DataService;
-import org.apache.maven.artifact.versioning.ComparableVersion;
+import com.avojak.webapp.aws.p2.repository.service.cache.ProjectCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +16,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -41,6 +32,7 @@ public class DataServiceImpl implements DataService {
 	private static final String LATEST_VERSION = "latest";
 
 	private final S3BucketRepository repository;
+	private final ProjectCache projectCache;
 	private final ApplicationContext context;
 
 	/**
@@ -48,10 +40,16 @@ public class DataServiceImpl implements DataService {
 	 *
 	 * @param repository
 	 * 		The {@link S3BucketRepository}. Cannot be null.
+	 * @param projectCache
+	 * 		The {@link ProjectCache}. Cannot be null.
+	 * @param context
+	 * 		The {@link ApplicationContext}. Cannot be null.
 	 */
 	@Autowired
-	public DataServiceImpl(final S3BucketRepository repository, final ApplicationContext context) {
+	public DataServiceImpl(final S3BucketRepository repository, final ProjectCache projectCache,
+						   final ApplicationContext context) {
 		this.repository = checkNotNull(repository, "repository cannot be null");
+		this.projectCache = checkNotNull(projectCache, "projectCache cannot be null");
 		this.context = checkNotNull(context, "context cannot be null");
 	}
 
@@ -80,6 +78,27 @@ public class DataServiceImpl implements DataService {
 		return getResource(key);
 	}
 
+	private Optional<String> getLatestVersion(final String name, final Qualifier qualifier) {
+		final Optional<Project> project = projectCache.getProject(name);
+		if (project.isPresent()) {
+			switch (qualifier) {
+				case SNAPSHOT:
+					if (project.get().getSnapshots().isEmpty()) {
+						return Optional.empty();
+					}
+					return Optional.of(project.get().getSnapshots().get(0).getVersion().getCanonical());
+				case RELEASE:
+					if (project.get().getReleases().isEmpty()) {
+						return Optional.empty();
+					}
+					return Optional.of(project.get().getReleases().get(0).getVersion().getCanonical());
+				default:
+					throw new IllegalStateException("Unsupported version qualifier: " + qualifier.name());
+			}
+		}
+		return Optional.empty();
+	}
+
 	private Optional<Resource> getResource(final String key) {
 		final Optional<S3Object> object = repository.getObject(key);
 		if (object.isPresent()) {
@@ -89,111 +108,14 @@ public class DataServiceImpl implements DataService {
 		return Optional.empty();
 	}
 
-
-	// TODO: Implement a cache in the data layer? This is horribly inefficient since we scan all objects every time...
-	@Override
-	public Optional<String> getLatestVersion(final String project, final Qualifier qualifier) {
-		checkNotNull(project, "project cannot be null");
-		checkArgument(!project.trim().isEmpty(), "project cannot be empty");
-		checkNotNull(qualifier, "qualifier cannot be null");
-
-		final String prefix = project + "/" + qualifier.getPathElement() + "/";
-		final List<S3ObjectSummary> summaries = repository.getObjectSummaries(prefix);
-		final Set<ComparableVersion> versions = new HashSet<>();
-		for (final S3ObjectSummary summary : summaries) {
-			final String key = summary.getKey();
-			final String regex = prefix + ".+/";
-			if (key.matches(regex)) {
-				final String version = key.replace(prefix, "").split("/")[0];
-				versions.add(new ComparableVersion(version));
-			}
-		}
-
-		if (versions.isEmpty()) {
-			LOGGER.debug("No latest {} version for {}", qualifier.toString(), project);
-			return Optional.empty();
-		}
-
-		final List<ComparableVersion> comparableVersions = new ArrayList<>(versions);
-		Collections.sort(comparableVersions);
-		final String latestVersion = comparableVersions.get(comparableVersions.size() - 1).toString();
-		LOGGER.debug("Latest {} version for {} is {}", qualifier.toString(), project, latestVersion);
-		return Optional.of(latestVersion);
-	}
-
 	@Override
 	public List<Project> getProjects() {
-		final List<S3ObjectSummary> summaries = repository.getObjectSummaries("")
-				.stream()
-				.filter(p -> p.getKey().contains("p2.index"))
-				.collect(Collectors.toList());
-
-		final List<String> projectNames = new ArrayList<>();
-		final Map<String, List<ProjectVersion>> snapshots = new HashMap<>();
-		final Map<String, List<ProjectVersion>> releases = new HashMap<>();
-
-		for (final S3ObjectSummary summary : summaries) {
-			final String[] tokens = summary.getKey().split("/");
-			final String name = tokens[0];
-			final Qualifier qualifier = Qualifier.fromPathElement(tokens[1]);
-			final ComparableVersion version = new ComparableVersion(tokens[2]);
-
-			if (!projectNames.contains(name)) {
-				projectNames.add(name);
-				snapshots.put(name, new ArrayList<>());
-				releases.put(name, new ArrayList<>());
-			}
-
-			switch (qualifier) {
-				case SNAPSHOT:
-					snapshots.get(name).add(new ProjectVersion(version, summary.getLastModified()));
-					break;
-				case RELEASE:
-					releases.get(name).add(new ProjectVersion(version, summary.getLastModified()));
-					break;
-				default:
-					throw new IllegalStateException("Unsupported qualifier: " + qualifier.name());
-			}
-		}
-
-		final List<Project> projects = new ArrayList<>();
-		for (final String projectName : projectNames) {
-			projects.add(new Project(projectName, snapshots.get(projectName), releases.get(projectName)));
-		}
-		return projects;
+		return projectCache.getProjects();
 	}
 
 	@Override
-	public Project getProject(final String name) {
-		checkNotNull(name, "name cannot be null");
-		checkArgument(!name.trim().isEmpty(), "name cannot be empty");
-
-		final List<S3ObjectSummary> summaries = repository.getObjectSummaries(name)
-				.stream()
-				.filter(p -> p.getKey().contains("p2.index"))
-				.collect(Collectors.toList());
-
-		final List<ProjectVersion> snapshots = new ArrayList<>();
-		final List<ProjectVersion> releases = new ArrayList<>();
-
-		for (final S3ObjectSummary summary : summaries) {
-			final String[] tokens = summary.getKey().split("/");
-			final Qualifier qualifier = Qualifier.fromPathElement(tokens[1]);
-			final ComparableVersion version = new ComparableVersion(tokens[2]);
-
-			switch (qualifier) {
-				case SNAPSHOT:
-					snapshots.add(new ProjectVersion(version, summary.getLastModified()));
-					break;
-				case RELEASE:
-					releases.add(new ProjectVersion(version, summary.getLastModified()));
-					break;
-				default:
-					throw new IllegalStateException("Unsupported qualifier: " + qualifier.name());
-			}
-		}
-
-		return new Project(name, snapshots, releases);
+	public Optional<Project> getProject(final String name) {
+		return projectCache.getProject(name);
 	}
 
 	@Override

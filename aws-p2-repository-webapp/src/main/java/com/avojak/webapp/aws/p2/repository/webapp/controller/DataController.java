@@ -73,23 +73,6 @@ public class DataController {
 	}
 
 	/**
-	 * Gets the latest version for a project.
-	 *
-	 * @param project
-	 * 		The project name.
-	 * @param qualifier
-	 * 		The version {@link Qualifier} path element.
-	 *
-	 * @return The non-null {@link ResponseEntity} containing the latest version.
-	 */
-	@GetMapping(value = "/{project}/{qualifier}/latestVersion", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> getLatestVersion(@PathVariable("project") final String project,
-												   @PathVariable("qualifier") final String qualifier) {
-		final Optional<String> latestVersion = service.getLatestVersion(project, Qualifier.fromPathElement(qualifier));
-		return latestVersion.map(v -> ResponseEntity.ok().body(v)).orElseGet(() -> ResponseEntity.notFound().build());
-	}
-
-	/**
 	 * Gets the available projects in the repository.
 	 *
 	 * @return The non-null, possibly empty collection of projects.

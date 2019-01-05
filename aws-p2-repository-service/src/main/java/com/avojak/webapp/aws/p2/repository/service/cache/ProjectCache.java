@@ -1,19 +1,82 @@
 package com.avojak.webapp.aws.p2.repository.service.cache;
 
 import com.avojak.webapp.aws.p2.repository.model.project.Project;
+import com.avojak.webapp.aws.p2.repository.service.configuration.ServiceProperties;
+import com.google.common.base.Ticker;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * Cache to hold projects.
+ */
 @Component
 public class ProjectCache {
 
-	private final LoadingCache<String, Project> cache;
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectCache.class);
+
+	private final LoadingCache<Boolean, Map<String, Project>> cache;
 
 	@Autowired
-	public ProjectCache(final ProjectCacheLoader cacheLoader) {
-		cache = CacheBuilder.newBuilder().build(cacheLoader);
+	public ProjectCache(final ProjectCacheLoader cacheLoader, final Ticker ticker, final ServiceProperties properties) {
+		checkNotNull(cacheLoader, "cacheLoader cannot be null");
+		checkNotNull(ticker, "ticker cannot be null");
+		checkNotNull(properties, "properties cannot be null");
+
+		cache = CacheBuilder.newBuilder()
+				.expireAfterWrite(properties.getCacheExpirationDuration(), properties.getCacheExpirationUnits())
+				.ticker(ticker)
+				.build(cacheLoader);
+	}
+
+	/**
+	 * Gets the list of projects.
+	 *
+	 * @return The non-null, possibly empty {@link List} of {@link Project} objects.
+	 */
+	public List<Project> getProjects() {
+		try {
+			final Map<String, Project> projectMap = cache.get(Boolean.TRUE);
+			final List<Project> projects = new ArrayList<>(projectMap.values());
+			Collections.sort(projects);
+			return projects;
+		} catch (final ExecutionException e) {
+			LOGGER.error("Error while retrieving projects from cache", e);
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Gets a single project.
+	 *
+	 * @param name
+	 * 		The project name. Cannot be null or empty.
+	 *
+	 * @return The non-null {@link Optional} of the {@link Project}.
+	 */
+	public Optional<Project> getProject(final String name) {
+		checkNotNull(name, "name cannot be null");
+		checkArgument(!name.trim().isEmpty(), "name cannot be empty");
+		try {
+			final Map<String, Project> projects = cache.get(Boolean.TRUE);
+			return Optional.ofNullable(projects.get(name));
+		} catch (final ExecutionException e) {
+			LOGGER.error("Error while retrieving project from cache", e);
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
 
 }

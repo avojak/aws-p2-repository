@@ -37,21 +37,9 @@ public interface DataService {
 	 * @param name
 	 * 		The project name. Cannot be null or empty.
 	 *
-	 * @return The non-null {@link Project}.
+	 * @return The non-null {@lnk Optional} of the {@link Project}.
 	 */
-	Project getProject(final String name);
-
-	/**
-	 * Gets the latest version of a project.
-	 *
-	 * @param project
-	 * 		The name of the project. Cannot be null or empty.
-	 * @param qualifier
-	 * 		The version qualifier. Cannot be null.
-	 *
-	 * @return The non-null {@link Optional} version.
-	 */
-	Optional<String> getLatestVersion(final String project, final Qualifier qualifier);
+	Optional<Project> getProject(final String name);
 
 	/**
 	 * Gets the application up-time.

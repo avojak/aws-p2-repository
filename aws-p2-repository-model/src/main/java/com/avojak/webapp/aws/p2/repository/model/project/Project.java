@@ -9,7 +9,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Models a project and all available versions.
  */
-public class Project {
+public class Project implements Comparable<Project> {
 
 	private final String name;
 	private final ProjectVersion latestVersion;
@@ -71,4 +71,9 @@ public class Project {
 		return releases;
 	}
 
+	@Override
+	public int compareTo(final Project project) {
+		checkNotNull(project, "project cannot be null");
+		return name.compareToIgnoreCase(project.name);
+	}
 }

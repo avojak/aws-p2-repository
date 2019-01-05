@@ -1,5 +1,6 @@
 package com.avojak.webapp.aws.p2.repository.webapp.controller;
 
+import com.avojak.webapp.aws.p2.repository.model.project.Project;
 import com.avojak.webapp.aws.p2.repository.service.DataService;
 import com.avojak.webapp.aws.p2.repository.webapp.configuration.WebappProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -63,7 +66,11 @@ public class ViewController {
 	 */
 	@GetMapping("/project/{name}")
 	public String showProject(@PathVariable("name") final String name, final Model model) {
-		model.addAttribute("project", service.getProject(name));
+		final Optional<Project> project = service.getProject(name);
+		if (!project.isPresent()) {
+			throw new IllegalArgumentException("Project does not exist: " + name);
+		}
+		model.addAttribute("project", project.get());
 		model.addAttribute("domain", properties.getCustomDomain());
 		// TODO: Pass project description
 		return "project";
