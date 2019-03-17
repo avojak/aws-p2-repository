@@ -6,13 +6,15 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Data access properties.
+ * Data-access properties.
  */
 public class DataAccessProperties {
 
 	private final String bucketName;
 	private final int maxKeys;
 	private final List<String> excludes;
+	private final String objectUrlFormat;
+	private final String metadataServiceBaseUrl;
 
 	/**
 	 * Constructor.
@@ -24,12 +26,17 @@ public class DataAccessProperties {
 	 * @param excludes
 	 * 		The list of object keys to exclude from results.
 	 */
-	DataAccessProperties(final String bucketName, final int maxKeys, final List<String> excludes) {
+	DataAccessProperties(final String bucketName, final int maxKeys, final List<String> excludes,
+						 final String objectUrlFormat, final String metadataServiceBaseUrl) {
 		this.bucketName = checkNotNull(bucketName, "bucketName cannot be null");
 		checkArgument(!bucketName.trim().isEmpty(), "bucketName cannot be empty");
 		this.maxKeys = maxKeys;
 		checkArgument(maxKeys > 0, "maxKeys must be a positive number");
 		this.excludes = checkNotNull(excludes, "excludes cannot be null");
+		this.objectUrlFormat = checkNotNull(objectUrlFormat, "objectUrlFormat cannot be null");
+		checkArgument(!objectUrlFormat.trim().isEmpty(), "objectUrlFormat cannot be empty");
+		this.metadataServiceBaseUrl = checkNotNull(metadataServiceBaseUrl, "metadataServiceBaseUrl cannot be null");
+		checkArgument(!metadataServiceBaseUrl.trim().isEmpty(), "metadataServiceBaseUrl cannot be empty");
 	}
 
 	public String getBucketName() {
@@ -42,5 +49,13 @@ public class DataAccessProperties {
 
 	public List<String> getExcludes() {
 		return excludes;
+	}
+
+	public String getObjectUrlFormat() {
+		return objectUrlFormat;
+	}
+
+	public String getMetadataServiceBaseUrl() {
+		return metadataServiceBaseUrl;
 	}
 }

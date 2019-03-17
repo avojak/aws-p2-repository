@@ -86,12 +86,12 @@ public class DataServiceImpl implements DataService {
 					if (project.get().getSnapshots().isEmpty()) {
 						return Optional.empty();
 					}
-					return Optional.of(project.get().getSnapshots().get(0).getVersion().getCanonical());
+					return Optional.of(project.get().getSnapshots().get(0).getVersion().toString());
 				case RELEASE:
 					if (project.get().getReleases().isEmpty()) {
 						return Optional.empty();
 					}
-					return Optional.of(project.get().getReleases().get(0).getVersion().getCanonical());
+					return Optional.of(project.get().getReleases().get(0).getVersion().toString());
 				default:
 					throw new IllegalStateException("Unsupported version qualifier: " + qualifier.name());
 			}

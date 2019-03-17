@@ -6,27 +6,48 @@
 
 <body>
 <div th:fragment="projectList" id="project-list" class="my-3 p-3 bg-white rounded box-shadow">
-    <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${project.name}"></h6>
+    <h6 class="border-bottom border-gray pb-2 mb-0" th:text="${project.metadata.name}"></h6>
 
-    <p class="text-muted pt-3">
-        Hydrogen is an Eclipse plugin to configure and launch one or more H2 database
-        servers.
-    </p>
+    <div class="text-muted pt-3">
+        Contents
+        <ul th:each="group : ${project.metadata.groups}" style="list-style-type:none;">
+            <li>
+                <details>
+                    <summary>
+                        <span th:text="${group.name}"></span>
+                        (<code><span th:text="${group.id}"></span></code>)
+                    </summary>
+                    <div style="margin-left:20px;">
+                        <p th:text="${group.description}"></p>
+                        <p class="small" th:text="'Version: ' + ${group.version}"></p>
+                        <span class="small badge badge-secondary"
+                              th:each="license : ${group.licenses}"
+                              th:text="${license.name}"></span>
+                    </div>
+                </details>
+            </li>
+        </ul>
+    </div>
+
+    <!--<p class="text-muted pt-3">-->
+    <!--Hydrogen is an Eclipse plugin to configure and launch one or more H2 database-->
+    <!--servers.-->
+    <!--</p>-->
 
     <div class="small">
         <p class="mb-0">
             <span class="text-muted">To keep up-to-date with the latest release, use the following URL:</span>
-            <code th:text="'https://' + ${domain} + '/content/' + ${project.name} + '/releases/latest'"></code>
+            <code th:text="'https://' + ${domain} + '/content/' + ${project.metadata.name} + '/releases/latest'"></code>
         </p>
 
         <p class="mb-0">
             <span class="text-muted">For the latest development snapshot, use the following URL:</span>
-            <code th:text="'https://' + ${domain} + '/content/' + ${project.name} + '/snapshots/latest'"></code>
+            <code th:text="'https://' + ${domain} + '/content/' + ${project.metadata.name} + '/snapshots/latest'"></code>
         </p>
 
         <p class="mb-0">
             <span class="text-muted">For all other versions:</span>
-            <code th:text="'https://' + ${domain} + '/content/' + ${project.name} + '/{snapshots|releases}/{version}'"></code>
+            <code th:text="'https://' + ${domain} + '/content/' + ${project.metadata.name} + '/{snapshots|releases}/{version}'"></code>
         </p>
 
         <ul class="list-unstyled text-muted pt-2">

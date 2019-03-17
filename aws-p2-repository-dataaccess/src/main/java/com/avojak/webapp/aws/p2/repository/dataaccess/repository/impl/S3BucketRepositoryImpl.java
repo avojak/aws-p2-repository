@@ -11,6 +11,7 @@ import com.avojak.webapp.aws.p2.repository.dataaccess.repository.configuration.D
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,8 @@ public class S3BucketRepositoryImpl implements S3BucketRepository {
 
 	private final AmazonS3 client;
 	private final DataAccessProperties properties;
+
+	private String bucketRegion;
 
 	/**
 	 * Constructor.
@@ -73,6 +76,12 @@ public class S3BucketRepositoryImpl implements S3BucketRepository {
 		} while (result.isTruncated());
 
 		return summaries.stream().filter(s -> !properties.getExcludes().contains(s.getKey())).collect(Collectors.toList());
+	}
+
+	@Override
+	public String getHostingUrl(final String key) {
+		final String hostingUrlFormat = properties.getObjectUrlFormat();
+		return MessageFormat.format(hostingUrlFormat, properties.getBucketName(), key == null ? "" : key);
 	}
 
 }

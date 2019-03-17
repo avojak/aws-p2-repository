@@ -21,6 +21,7 @@ public class AWSP2Repository {
 	 * 		The command-line arguments.
 	 */
 	public static void main(final String... args) {
+		// TODO: Somewhere on startup, should verify that the p2 inspector is running
 		SpringApplication.run(AWSP2Repository.class, args);
 	}
 

@@ -12,8 +12,21 @@ public class ServiceConfiguration {
 
 	@Value("${aws.p2.repo.cache.expiration}")
 	private long cacheExpirationDuration;
+
 	@Value("${aws.p2.repo.cache.expiration.units}")
 	private TimeUnit cacheExpirationUnits;
+
+	@Value("${aws.p2.repo.latest.snapshot.content.url.format}")
+	private String latestSnapshotContentUrlFormat;
+
+	@Value("${aws.p2.repo.latest.release.content.url.format}")
+	private String latestReleaseContentUrlFormat;
+
+	@Value("${aws.p2.repo.generic.content.url.format}")
+	private String genericContentUrlFormat;
+
+	@Value("${aws.p2.repo.webapp.custom.domain}")
+	private String customDomain;
 
 	@Bean
 	public Ticker ticker() {
@@ -22,7 +35,8 @@ public class ServiceConfiguration {
 
 	@Bean
 	public ServiceProperties serviceProperties() {
-		return new ServiceProperties(cacheExpirationDuration, cacheExpirationUnits);
+		return new ServiceProperties(cacheExpirationDuration, cacheExpirationUnits, latestSnapshotContentUrlFormat,
+				latestReleaseContentUrlFormat, genericContentUrlFormat, customDomain);
 	}
 
 }

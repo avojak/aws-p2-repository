@@ -10,10 +10,10 @@
 
     <ul class="list-unstyled text-muted pt-3" th:each="project : ${projects}">
         <li class="media pb-3 mb-3 small lh-125 border-bottom border-gray projects-entry"
-            th:onclick="'javascript:showProject(\'' + ${project.name} + '\');'">
+            th:onclick="'javascript:showProject(\'' + ${project.metadata.name} + '\');'">
             <div class="media-body">
                 <span class="d-block pb-1">
-                    <strong class="text-gray-dark pr-2" th:text="${project.name}"></strong>
+                    <strong class="text-gray-dark pr-2" th:text="${project.metadata.name}"></strong>
                     <span class="badge badge-secondary" th:text="${project.latestVersion?.version}"></span>
                 </span>
                 <p>Hydrogen is an Eclipse plugin to configure and launch one or more H2 database servers.</p>

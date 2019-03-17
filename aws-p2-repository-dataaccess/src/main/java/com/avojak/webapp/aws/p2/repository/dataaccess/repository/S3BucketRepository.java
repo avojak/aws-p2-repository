@@ -31,4 +31,6 @@ public interface S3BucketRepository {
 	 */
 	List<S3ObjectSummary> getObjectSummaries(final String prefix);
 
+	String getHostingUrl(final String key);
+
 }
