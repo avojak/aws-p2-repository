@@ -22,6 +22,9 @@
     },
     "AWS_P2_REPO_WEBAPP_CUSTOM_DOMAIN": {
       "required": true
+    },
+    "P2_INSPECTOR_BASE_URL": {
+      "required": true
     }
   },
   "addons": []
