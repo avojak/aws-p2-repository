@@ -1,7 +1,11 @@
 package com.avojak.webapp.aws.p2.repository.model.repository;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.net.URI;
-import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -61,17 +65,36 @@ public class License {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		License license = (License) o;
-		return Objects.equals(name, license.name) &&
-				Objects.equals(body, license.body) &&
-				Objects.equals(location, license.location);
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		License rhs = (License) obj;
+		return new EqualsBuilder()
+				.append(name, rhs.name)
+				.append(body, rhs.body)
+				.append(location, rhs.location)
+				.build();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, body, location);
+		return new HashCodeBuilder()
+				.append(name)
+				.append(body)
+				.append(location)
+				.build();
 	}
+
 }

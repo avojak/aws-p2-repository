@@ -1,7 +1,11 @@
 package com.avojak.webapp.aws.p2.repository.model.repository;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Collection;
-import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -102,20 +106,42 @@ public class IUGroup {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		IUGroup iuGroup = (IUGroup) o;
-		return Objects.equals(name, iuGroup.name) &&
-				Objects.equals(id, iuGroup.id) &&
-				Objects.equals(description, iuGroup.description) &&
-				Objects.equals(copyright, iuGroup.copyright) &&
-				Objects.equals(licenses, iuGroup.licenses) &&
-				Objects.equals(version, iuGroup.version);
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		IUGroup rhs = (IUGroup) obj;
+		return new EqualsBuilder()
+				.append(name, rhs.name)
+				.append(id, rhs.id)
+				.append(description, rhs.description)
+				.append(copyright, rhs.copyright)
+				.append(licenses, rhs.licenses)
+				.append(version, rhs.version)
+				.build();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, id, description, copyright, licenses, version);
+		return new HashCodeBuilder()
+				.append(name)
+				.append(id)
+				.append(description)
+				.append(copyright)
+				.append(licenses)
+				.append(version)
+				.build();
 	}
+
 }

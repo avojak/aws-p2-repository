@@ -1,5 +1,10 @@
 package com.avojak.webapp.aws.p2.repository.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**
@@ -55,6 +60,39 @@ public class Uptime {
 	 */
 	public int getMinutes() {
 		return minutes;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Uptime rhs = (Uptime) obj;
+		return new EqualsBuilder()
+				.append(days, rhs.days)
+				.append(hours, rhs.hours)
+				.append(minutes, rhs.minutes)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(days)
+				.append(hours)
+				.append(minutes)
+				.build();
 	}
 
 }

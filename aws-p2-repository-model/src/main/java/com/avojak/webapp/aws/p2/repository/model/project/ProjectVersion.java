@@ -1,5 +1,9 @@
 package com.avojak.webapp.aws.p2.repository.model.project;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 
 import java.util.Date;
@@ -30,9 +34,9 @@ public class ProjectVersion implements Comparable<ProjectVersion> {
 	@Override
 	public int compareTo(final ProjectVersion other) {
 		checkNotNull(other, "other cannot be null");
-		return version.compareTo(other.getVersion());
+		// Sort most recent first
+		return -1 * version.compareTo(other.getVersion());
 	}
-
 
 	/**
 	 * Gets the version.
@@ -50,6 +54,37 @@ public class ProjectVersion implements Comparable<ProjectVersion> {
 	 */
 	public Date getDate() {
 		return date;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		ProjectVersion rhs = (ProjectVersion) obj;
+		return new EqualsBuilder()
+				.append(version, rhs.version)
+				.append(date, rhs.date)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(version)
+				.append(date)
+				.build();
 	}
 
 }

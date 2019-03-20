@@ -1,8 +1,12 @@
 package com.avojak.webapp.aws.p2.repository.model.repository;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.net.URI;
 import java.util.Collection;
-import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -88,19 +92,40 @@ public class P2Repository {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		P2Repository that = (P2Repository) o;
-		return isCompressed == that.isCompressed &&
-				lastModified == that.lastModified &&
-				Objects.equals(name, that.name) &&
-				Objects.equals(location, that.location) &&
-				Objects.equals(groups, that.groups);
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		P2Repository rhs = (P2Repository) obj;
+		return new EqualsBuilder()
+				.append(name, rhs.name)
+				.append(location, rhs.location)
+				.append(isCompressed, rhs.isCompressed)
+				.append(lastModified, rhs.lastModified)
+				.append(groups, rhs.groups)
+				.build();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, location, isCompressed, lastModified, groups);
+		return new HashCodeBuilder()
+				.append(name)
+				.append(location)
+				.append(isCompressed)
+				.append(lastModified)
+				.append(groups)
+				.build();
 	}
+
 }

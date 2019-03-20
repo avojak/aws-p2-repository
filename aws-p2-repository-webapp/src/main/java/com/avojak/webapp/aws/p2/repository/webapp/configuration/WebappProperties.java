@@ -1,5 +1,10 @@
 package com.avojak.webapp.aws.p2.repository.webapp.configuration;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * The web application properties.
  */
@@ -78,6 +83,45 @@ public class WebappProperties {
 	 */
 	public String getBucketName() {
 		return bucketName;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		WebappProperties rhs = (WebappProperties) obj;
+		return new EqualsBuilder()
+				.append(brandName, rhs.brandName)
+				.append(brandIcon, rhs.brandIcon)
+				.append(brandFavicon, rhs.brandFavicon)
+				.append(customDomain, rhs.customDomain)
+				.append(welcomeMessage, rhs.welcomeMessage)
+				.append(bucketName, rhs.bucketName)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(brandName)
+				.append(brandIcon)
+				.append(brandFavicon)
+				.append(customDomain)
+				.append(welcomeMessage)
+				.append(bucketName)
+				.build();
 	}
 
 }

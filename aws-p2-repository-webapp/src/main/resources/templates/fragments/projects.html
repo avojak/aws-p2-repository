@@ -16,8 +16,13 @@
                     <strong class="text-gray-dark pr-2" th:text="${project.metadata.name}"></strong>
                     <span class="badge badge-secondary" th:text="${project.latestVersion?.version}"></span>
                 </span>
-                <p>Hydrogen is an Eclipse plugin to configure and launch one or more H2 database servers.</p>
-                <span th:text="${project.latestVersion?.date}"></span>
+                <span th:switch="${#lists.size(project.metadata.groups)}">
+                    <p th:case="'0'">Empty repository</p>
+                    <p th:case="'1'" th:text="${project.metadata.groups[0].description}"></p>
+                    <p th:case="'*'"
+                       th:text="'Contains ' + ${#lists.size(project.metadata.groups)} + ' installable unit groups'"></p>
+                </span>
+                <span th:text="'Last updated: ' + ${project.latestVersion?.date}"></span>
             </div>
         </li>
     </ul>

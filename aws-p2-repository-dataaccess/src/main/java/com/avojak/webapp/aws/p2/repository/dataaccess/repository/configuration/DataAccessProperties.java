@@ -1,5 +1,10 @@
 package com.avojak.webapp.aws.p2.repository.dataaccess.repository.configuration;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -57,5 +62,42 @@ public class DataAccessProperties {
 
 	public String getMetadataServiceBaseUrl() {
 		return metadataServiceBaseUrl;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		DataAccessProperties rhs = (DataAccessProperties) obj;
+		return new EqualsBuilder()
+				.append(bucketName, rhs.bucketName)
+				.append(maxKeys, rhs.maxKeys)
+				.append(excludes, rhs.excludes)
+				.append(objectUrlFormat, rhs.objectUrlFormat)
+				.append(metadataServiceBaseUrl, rhs.metadataServiceBaseUrl)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(bucketName)
+				.append(maxKeys)
+				.append(excludes)
+				.append(objectUrlFormat)
+				.append(metadataServiceBaseUrl)
+				.build();
 	}
 }

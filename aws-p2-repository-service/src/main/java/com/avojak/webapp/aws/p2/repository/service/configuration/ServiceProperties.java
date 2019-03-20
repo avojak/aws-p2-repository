@@ -1,5 +1,9 @@
 package com.avojak.webapp.aws.p2.repository.service.configuration;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -14,9 +18,9 @@ public class ServiceProperties {
 	private final String genericContentUrlFormat;
 	private final String customDomain;
 
-	public ServiceProperties(final long cacheExpirationDuration, final TimeUnit cacheExpirationUnits,
-							 final String latestSnapshotContentUrlFormat, final String latestReleaseContentUrlFormat,
-							 final String genericContentUrlFormat, final String customDomain) {
+	ServiceProperties(final long cacheExpirationDuration, final TimeUnit cacheExpirationUnits,
+					  final String latestSnapshotContentUrlFormat, final String latestReleaseContentUrlFormat,
+					  final String genericContentUrlFormat, final String customDomain) {
 		this.cacheExpirationDuration = cacheExpirationDuration;
 		this.cacheExpirationUnits = cacheExpirationUnits;
 		this.latestSnapshotContentUrlFormat = latestSnapshotContentUrlFormat;
@@ -47,5 +51,44 @@ public class ServiceProperties {
 
 	public String getCustomDomain() {
 		return customDomain;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		ServiceProperties rhs = (ServiceProperties) obj;
+		return new EqualsBuilder()
+				.append(cacheExpirationDuration, rhs.cacheExpirationDuration)
+				.append(cacheExpirationUnits, rhs.cacheExpirationUnits)
+				.append(latestSnapshotContentUrlFormat, rhs.latestSnapshotContentUrlFormat)
+				.append(latestReleaseContentUrlFormat, rhs.latestReleaseContentUrlFormat)
+				.append(genericContentUrlFormat, rhs.genericContentUrlFormat)
+				.append(customDomain, rhs.customDomain)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(cacheExpirationDuration)
+				.append(cacheExpirationUnits)
+				.append(latestSnapshotContentUrlFormat)
+				.append(latestReleaseContentUrlFormat)
+				.append(genericContentUrlFormat)
+				.append(customDomain)
+				.build();
 	}
 }

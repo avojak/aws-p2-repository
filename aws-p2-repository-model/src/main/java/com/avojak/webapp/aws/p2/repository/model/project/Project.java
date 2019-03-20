@@ -1,6 +1,10 @@
 package com.avojak.webapp.aws.p2.repository.model.project;
 
 import com.avojak.webapp.aws.p2.repository.model.repository.P2Repository;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
 
@@ -83,4 +87,46 @@ public class Project implements Comparable<Project> {
 		checkNotNull(project, "project cannot be null");
 		return metadata.getName().compareToIgnoreCase(project.getMetadata().getName());
 	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Project rhs = (Project) obj;
+		return new EqualsBuilder()
+				.append(metadata, rhs.metadata)
+				.append(latestVersion, rhs.latestVersion)
+				.append(snapshots, rhs.snapshots)
+				.append(releases, rhs.releases)
+				.append(latestSnapshotUrl, rhs.latestSnapshotUrl)
+				.append(latestReleaseUrl, rhs.latestReleaseUrl)
+				.append(genericUrl, rhs.genericUrl)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(metadata)
+				.append(latestVersion)
+				.append(snapshots)
+				.append(releases)
+				.append(latestSnapshotUrl)
+				.append(latestReleaseUrl)
+				.append(genericUrl)
+				.build();
+	}
+
 }
