@@ -1,7 +1,7 @@
 package com.avojak.webapp.aws.p2.repository.dataaccess.repository.impl;
 
+import com.avojak.webapp.aws.p2.repository.dataaccess.configuration.DataAccessProperties;
 import com.avojak.webapp.aws.p2.repository.dataaccess.repository.MetadataRepository;
-import com.avojak.webapp.aws.p2.repository.dataaccess.repository.configuration.DataAccessProperties;
 import com.avojak.webapp.aws.p2.repository.model.repository.P2Repository;
 import com.google.gson.Gson;
 import org.apache.commons.codec.Charsets;
@@ -75,7 +75,7 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 		try {
 			final HttpResponse response = httpClient.execute(request);
 			return gson.fromJson(EntityUtils.toString(response.getEntity(), Charsets.UTF_8), P2Repository.class);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			LOGGER.error("Failed to retrieve metadata", e);
 			throw new RuntimeException(e);
 		}

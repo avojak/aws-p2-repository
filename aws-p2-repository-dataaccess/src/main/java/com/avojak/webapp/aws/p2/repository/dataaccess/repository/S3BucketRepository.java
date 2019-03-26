@@ -31,6 +31,14 @@ public interface S3BucketRepository {
 	 */
 	List<S3ObjectSummary> getObjectSummaries(final String prefix);
 
+	/**
+	 * Gets the hosting URL for the object with the given key.
+	 *
+	 * @param key
+	 * 		The object key. Cannot be null.
+	 *
+	 * @return The non-null hosting URL.
+	 */
 	String getHostingUrl(final String key);
 
 }

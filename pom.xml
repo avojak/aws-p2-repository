@@ -24,7 +24,7 @@
     </parent>
 
     <name>AWS p2 Repository</name>
-    <description><!-- TODO --></description>
+    <description>Web application to host p2 repositories backed by AWS S3</description>
     <url>https://github.com/avojak/aws-p2-reposiory</url>
 
     <licenses>

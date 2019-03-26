@@ -46,6 +46,7 @@ public class ViewController {
 	 */
 	@GetMapping("")
 	public String index(final Model model) {
+		// TODO: Handle missing values
 		model.addAttribute("title", properties.getBrandName());
 		model.addAttribute("brandIcon", properties.getBrandIcon());
 		model.addAttribute("brandFavicon", properties.getBrandFavicon());

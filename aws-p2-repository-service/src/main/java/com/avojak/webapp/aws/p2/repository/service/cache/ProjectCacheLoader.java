@@ -13,11 +13,8 @@ import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,35 +112,6 @@ public class ProjectCacheLoader extends CacheLoader<Boolean, Map<String, Project
 			final String genericUrl = String.format(properties.getGenericContentUrlFormat(), customDomain, name);
 			projects.put(name, new Project(updatedMetadata, snapshots, releases, mostRecentVersion.get(),
 					latestSnapshotUrl, latestReleaseUrl, genericUrl));
-		}
-
-		// TODO: REMOVE THIS
-		try {
-			final List<ProjectVersion> snapshots = new ArrayList<>();
-			snapshots.add(new ProjectVersion(new ComparableVersion("1.0.0-SNAPSHOT"), new Date()));
-			snapshots.add(new ProjectVersion(new ComparableVersion("1.1.0-SNAPSHOT"), new Date()));
-			final List<ProjectVersion> releases = new ArrayList<>();
-			releases.add(new ProjectVersion(new ComparableVersion("1.0.0"), new Date()));
-			releases.add(new ProjectVersion(new ComparableVersion("1.1.0"), new Date()));
-
-			Collections.sort(snapshots);
-			Collections.sort(releases);
-
-			projects.put("foobar",
-					new Project(
-							new P2Repository("foobar",
-									new URI("http://s3.amazonaws.com/p2.avojak.com/foobar/snapshots/1.1.0"),
-									false,
-									System.currentTimeMillis(),
-									new ArrayList<>()),
-							snapshots,
-							releases,
-							new ProjectVersion(new ComparableVersion("1.1.0"), new Date()),
-							"https://p2.avojak.com/content/hydrogen/snapshots/latest",
-							"https://p2.avojak.com/content/hydrogen/releases/latest",
-							"https://p2.avojak.com/content/hydrogen/{snapshots|releases}/{version}"));
-		} catch (final URISyntaxException e) {
-			// do nothing
 		}
 
 		return projects;

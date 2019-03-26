@@ -1,6 +1,6 @@
 # AWS p2 Repository
 
-Web application to host p2 repositories backed by AWS.
+Web application to host p2 repositories backed by AWS S3.
 
 ## Getting Started
 
@@ -10,27 +10,24 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
-```
-Give examples
-```
+* Maven 3.5.x
+* Java 1.8+
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Package the self-contained JAR:
 
 ```
-Give the example
+$ mvn clean package
 ```
 
-And repeat
+Run the JAR:
 
 ```
-until finished
+$ java -jar aws-p2-repository-webapp/target/aws-p2-repository-webapp-<version>.jar
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+To view, open a web browser and navigate to `localhost:<port>/browse`.
 
 ## Running the tests
 

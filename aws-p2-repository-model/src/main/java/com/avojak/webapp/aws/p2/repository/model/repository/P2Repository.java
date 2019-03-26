@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -20,7 +21,7 @@ public class P2Repository {
 	private final URI location;
 	private final boolean isCompressed;
 	private final long lastModified;
-	private final Collection<IUGroup> groups;
+	private final Set<IUGroup> groups;
 
 	/**
 	 * Constructor.
@@ -37,7 +38,7 @@ public class P2Repository {
 	 * 		The collection of installable unit groups. Cannot be null.
 	 */
 	public P2Repository(final String name, final URI location, final boolean isCompressed, final long lastModified,
-						final Collection<IUGroup> groups) {
+						final Set<IUGroup> groups) {
 		this.name = checkNotNull(name, "name cannot be null");
 		checkArgument(!name.trim().isEmpty(), "name cannot be empty");
 		this.location = checkNotNull(location, "location cannot be null");
@@ -87,13 +88,13 @@ public class P2Repository {
 	 *
 	 * @return The non-null, possibly empty {@link Collection}.
 	 */
-	public Collection<IUGroup> getGroups() {
+	public Set<IUGroup> getGroups() {
 		return groups;
 	}
 
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 	}
 
 	@Override

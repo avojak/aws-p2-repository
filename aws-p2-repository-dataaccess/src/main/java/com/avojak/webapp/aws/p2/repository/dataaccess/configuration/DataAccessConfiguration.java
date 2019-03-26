@@ -1,4 +1,4 @@
-package com.avojak.webapp.aws.p2.repository.dataaccess.repository.configuration;
+package com.avojak.webapp.aws.p2.repository.dataaccess.configuration;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;

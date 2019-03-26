@@ -1,4 +1,4 @@
-package com.avojak.webapp.aws.p2.repository.dataaccess.repository.configuration;
+package com.avojak.webapp.aws.p2.repository.dataaccess.configuration;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

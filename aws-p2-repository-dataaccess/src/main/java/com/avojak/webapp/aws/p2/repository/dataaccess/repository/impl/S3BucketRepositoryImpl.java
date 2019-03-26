@@ -6,8 +6,8 @@ import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.avojak.webapp.aws.p2.repository.dataaccess.configuration.DataAccessProperties;
 import com.avojak.webapp.aws.p2.repository.dataaccess.repository.S3BucketRepository;
-import com.avojak.webapp.aws.p2.repository.dataaccess.repository.configuration.DataAccessProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,8 +80,9 @@ public class S3BucketRepositoryImpl implements S3BucketRepository {
 
 	@Override
 	public String getHostingUrl(final String key) {
+		checkNotNull(key, "key cannot be null");
 		final String hostingUrlFormat = properties.getObjectUrlFormat();
-		return MessageFormat.format(hostingUrlFormat, properties.getBucketName(), key == null ? "" : key);
+		return MessageFormat.format(hostingUrlFormat, properties.getBucketName(), key);
 	}
 
 }
