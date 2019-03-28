@@ -13,14 +13,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>${parent.groupId}</groupId>
-            <artifactId>${parent.artifactId}-model</artifactId>
-            <version>${parent.version}</version>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-model</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>${parent.groupId}</groupId>
-            <artifactId>${parent.artifactId}-service</artifactId>
-            <version>${parent.version}</version>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-service</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
