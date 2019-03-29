@@ -33,18 +33,13 @@ public class S3BucketRepositoryImplTest {
 	@Mock
 	private AmazonS3 client;
 
-	@Mock
 	private DataAccessProperties properties;
-
 	private S3BucketRepository repository;
 
 	@Before
 	public void setup() {
-		when(properties.getBucketName()).thenReturn("p2.avojak.com");
-		when(properties.getMaxKeys()).thenReturn(100);
-		when(properties.getExcludes()).thenReturn(new ArrayList<>());
-		when(properties.getObjectUrlFormat()).thenReturn("http://s3.amazonaws.com/{0}/{1}");
-
+		properties = new DataAccessProperties("p2.avojak.com", 100, new ArrayList<>(),
+				"http://s3.amazonaws.com/{0}/{1}", "https://www.example.com");
 		repository = new S3BucketRepositoryImpl(client, properties);
 	}
 
@@ -70,8 +65,9 @@ public class S3BucketRepositoryImplTest {
 
 	@Test
 	public void testGetObject_ExcludedKey() {
-		when(properties.getExcludes()).thenReturn(Arrays.asList("mock"));
-		assertFalse(repository.getObject("mock").isPresent());
+		properties = new DataAccessProperties("p2.avojak.com", 100, Arrays.asList("mock"),
+				"http://s3.amazonaws.com/{0}/{1}", "https://www.example.com");
+		assertFalse(new S3BucketRepositoryImpl(client, properties).getObject("mock").isPresent());
 	}
 
 	@Test
@@ -103,8 +99,10 @@ public class S3BucketRepositoryImplTest {
 
 	@Test
 	public void testGetObjectSummaries() {
+		properties = new DataAccessProperties("p2.avojak.com", 100, Arrays.asList("excluded"),
+				"http://s3.amazonaws.com/{0}/{1}", "https://www.example.com");
+
 		final ArgumentCaptor<ListObjectsV2Request> requestCaptor = ArgumentCaptor.forClass(ListObjectsV2Request.class);
-		when(properties.getExcludes()).thenReturn(Arrays.asList("excluded"));
 		final ListObjectsV2Result result = mock(ListObjectsV2Result.class);
 		final S3ObjectSummary summary1 = mock(S3ObjectSummary.class);
 		when(summary1.getKey()).thenReturn("excluded");
@@ -115,7 +113,7 @@ public class S3BucketRepositoryImplTest {
 		when(result.getObjectSummaries()).thenReturn(Arrays.asList(summary1), Arrays.asList(summary2));
 		when(client.listObjectsV2(requestCaptor.capture())).thenReturn(result);
 
-		final List<S3ObjectSummary> summaries = repository.getObjectSummaries("prefix");
+		final List<S3ObjectSummary> summaries = new S3BucketRepositoryImpl(client, properties).getObjectSummaries("prefix");
 
 		assertEquals(1, summaries.size());
 		assertEquals(summary2, summaries.get(0));

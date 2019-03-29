@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Models a license.
  */
-public class License {
+public final class License {
 
 	private final String name;
 	private final String body;

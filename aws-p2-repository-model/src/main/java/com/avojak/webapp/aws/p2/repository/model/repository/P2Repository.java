@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Models the P2 repository details.
  */
-public class P2Repository {
+public final class P2Repository {
 
 	private final String name;
 	private final URI location;

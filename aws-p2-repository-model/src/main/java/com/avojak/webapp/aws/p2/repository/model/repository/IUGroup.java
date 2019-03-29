@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Models an installable unit group.
  */
-public class IUGroup {
+public final class IUGroup {
 
 	private final String name;
 	private final String id;

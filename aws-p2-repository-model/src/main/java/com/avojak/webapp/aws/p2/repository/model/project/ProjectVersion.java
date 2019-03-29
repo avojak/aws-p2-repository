@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Models a version of a project.
  */
-public class ProjectVersion implements Comparable<ProjectVersion> {
+public final class ProjectVersion implements Comparable<ProjectVersion> {
 
 	private final ComparableVersion version;
 	private final Date date;

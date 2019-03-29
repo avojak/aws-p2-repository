@@ -10,7 +10,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * Models the application up-time.
  */
-public class Uptime {
+public final class Uptime {
 
 	private final long days;
 	private final long hours;

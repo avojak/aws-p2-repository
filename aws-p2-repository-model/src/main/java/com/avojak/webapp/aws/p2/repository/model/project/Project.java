@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Models a project and all available versions.
  */
-public class Project implements Comparable<Project> {
+public final class Project implements Comparable<Project> {
 
 	private final P2Repository metadata;
 	private final ProjectVersion latestVersion;
@@ -36,8 +36,11 @@ public class Project implements Comparable<Project> {
 	 * @param latestVersion
 	 * 		The latest version. Cannot be null.
 	 * @param latestSnapshotUrl
+	 * 		The URL for retrieving the latest snapshot. Cannot be null or empty.
 	 * @param latestReleaseUrl
+	 * 		The URL for retrieving the latest release. Cannot be null or empty.
 	 * @param genericUrl
+	 * 		The generic URL format for retrieving any version. Cannot be null or empty.
 	 */
 	public Project(final P2Repository metadata, final List<ProjectVersion> snapshots,
 				   final List<ProjectVersion> releases, final ProjectVersion latestVersion,

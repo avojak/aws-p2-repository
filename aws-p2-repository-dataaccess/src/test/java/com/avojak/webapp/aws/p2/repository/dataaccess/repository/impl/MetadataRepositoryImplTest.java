@@ -23,12 +23,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Test class for {@link MetadataRepositoryImpl}.
@@ -39,18 +38,16 @@ public class MetadataRepositoryImplTest {
 	@Mock
 	private HttpClient httpClient;
 
-	@Mock
-	private DataAccessProperties properties;
-
 	private final String url = "https://p2.avojak.com";
 
 	private Gson gson;
+	private DataAccessProperties properties;
 	private MetadataRepository repository;
 
 	@Before
 	public void setup() {
 		gson = new GsonBuilder().setPrettyPrinting().create();
-		when(properties.getMetadataServiceBaseUrl()).thenReturn("https://www.example.com");
+		properties = new DataAccessProperties("bucketName", 100, new ArrayList<>(), "{0}", "https://www.example.com");
 		repository = new MetadataRepositoryImpl(httpClient, gson, properties);
 	}
 
