@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of {@link CacheLoader} for the {@link ProjectCache}.
  */
@@ -30,14 +32,27 @@ public class ProjectCacheLoader extends CacheLoader<Boolean, Map<String, Project
 	private static final String KEY_DELIM = "/";
 	private static final String P2_INDEX_KEY_ELEM = "p2.index";
 
-	@Autowired
-	private S3BucketRepository s3BucketRepository;
+	private final S3BucketRepository s3BucketRepository;
+	private final MetadataRepository metadataRepository;
+	private final ServiceProperties properties;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param s3BucketRepository
+	 * 		The {@link S3BucketRepository}. Cannot be null.
+	 * @param metadataRepository
+	 * 		The {@link MetadataRepository}. Cannot be null.
+	 * @param properties
+	 * 		The {@link ServiceProperties}. Cannot be null.
+	 */
 	@Autowired
-	private MetadataRepository metadataRepository;
-
-	@Autowired
-	private ServiceProperties properties;
+	public ProjectCacheLoader(final S3BucketRepository s3BucketRepository, final MetadataRepository metadataRepository,
+							  final ServiceProperties properties) {
+		this.s3BucketRepository = checkNotNull(s3BucketRepository, "s3BucketRepository cannot be null");
+		this.metadataRepository = checkNotNull(metadataRepository, "metadataRepository cannot be null");
+		this.properties = checkNotNull(properties, "properties cannot be null");
+	}
 
 	// TODO: Refactor this
 	@Override
@@ -87,7 +102,7 @@ public class ProjectCacheLoader extends CacheLoader<Boolean, Map<String, Project
 				}
 
 				// Update the most recent summary and version
-				if (!mostRecentSummary.isPresent() || (version.compareTo(mostRecentVersion.get()) > 1)) {
+				if (!mostRecentSummary.isPresent() || (version.compareTo(mostRecentVersion.get()) < 1)) {
 					mostRecentSummary = Optional.of(summary);
 					mostRecentVersion = Optional.of(version);
 				}
@@ -102,8 +117,8 @@ public class ProjectCacheLoader extends CacheLoader<Boolean, Map<String, Project
 			Collections.sort(releases);
 
 			// Create the new project object, overriding the name from the metadata with the project name
-			final String url = mostRecentSummary.get().getKey().replace(KEY_DELIM + P2_INDEX_KEY_ELEM, "");
-			final P2Repository metadata = metadataRepository.getMetadata(s3BucketRepository.getHostingUrl(url));
+			final String key = mostRecentSummary.get().getKey().replace(KEY_DELIM + P2_INDEX_KEY_ELEM, "");
+			final P2Repository metadata = metadataRepository.getMetadata(s3BucketRepository.getHostingUrl(key));
 			final P2Repository updatedMetadata = new P2Repository(name, metadata.getLocation(), metadata.isCompressed(),
 					metadata.getLastModified(), metadata.getGroups());
 			final String customDomain = properties.getCustomDomain();

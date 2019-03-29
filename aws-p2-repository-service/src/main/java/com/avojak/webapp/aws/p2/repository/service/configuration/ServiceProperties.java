@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Models the service properties.
+ */
 @Component
-public class ServiceProperties {
+public final class ServiceProperties {
 
 	private final long cacheExpirationDuration;
 	private final TimeUnit cacheExpirationUnits;
@@ -18,9 +21,25 @@ public class ServiceProperties {
 	private final String genericContentUrlFormat;
 	private final String customDomain;
 
-	ServiceProperties(final long cacheExpirationDuration, final TimeUnit cacheExpirationUnits,
-					  final String latestSnapshotContentUrlFormat, final String latestReleaseContentUrlFormat,
-					  final String genericContentUrlFormat, final String customDomain) {
+	/**
+	 * Constructor.
+	 *
+	 * @param cacheExpirationDuration
+	 * 		The cache expiration duration.
+	 * @param cacheExpirationUnits
+	 * 		The units of the cache expiration duration.
+	 * @param latestSnapshotContentUrlFormat
+	 * 		The format of the URL for the latest snapshot content.
+	 * @param latestReleaseContentUrlFormat
+	 * 		The format of the URL for the latest release content.
+	 * @param genericContentUrlFormat
+	 * 		The format of the URL for generic version content.
+	 * @param customDomain
+	 * 		The custom domain name.
+	 */
+	public ServiceProperties(final long cacheExpirationDuration, final TimeUnit cacheExpirationUnits,
+							 final String latestSnapshotContentUrlFormat, final String latestReleaseContentUrlFormat,
+							 final String genericContentUrlFormat, final String customDomain) {
 		this.cacheExpirationDuration = cacheExpirationDuration;
 		this.cacheExpirationUnits = cacheExpirationUnits;
 		this.latestSnapshotContentUrlFormat = latestSnapshotContentUrlFormat;

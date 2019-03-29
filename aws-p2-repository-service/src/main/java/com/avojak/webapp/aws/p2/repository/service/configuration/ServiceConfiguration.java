@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Service configuration class.
+ */
 @Configuration
 public class ServiceConfiguration {
 
@@ -28,11 +31,21 @@ public class ServiceConfiguration {
 	@Value("${aws.p2.repo.webapp.custom.domain}")
 	private String customDomain;
 
+	/**
+	 * Creates a new {@link Ticker}.
+	 *
+	 * @return The new, non-null {@link Ticker}.
+	 */
 	@Bean
 	public Ticker ticker() {
 		return Ticker.systemTicker();
 	}
 
+	/**
+	 * Creates the service properties.
+	 *
+	 * @return The new, non-null {@link ServiceProperties}.
+	 */
 	@Bean
 	public ServiceProperties serviceProperties() {
 		return new ServiceProperties(cacheExpirationDuration, cacheExpirationUnits, latestSnapshotContentUrlFormat,

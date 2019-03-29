@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +32,7 @@ public class DataServiceImpl implements DataService {
 
 	private final S3BucketRepository repository;
 	private final ProjectCache projectCache;
+	private final InputStreamResourceFactory inputStreamResourceFactory;
 	private final ApplicationContext context;
 
 	/**
@@ -47,9 +47,11 @@ public class DataServiceImpl implements DataService {
 	 */
 	@Autowired
 	public DataServiceImpl(final S3BucketRepository repository, final ProjectCache projectCache,
+						   final InputStreamResourceFactory inputStreamResourceFactory,
 						   final ApplicationContext context) {
 		this.repository = checkNotNull(repository, "repository cannot be null");
 		this.projectCache = checkNotNull(projectCache, "projectCache cannot be null");
+		this.inputStreamResourceFactory = checkNotNull(inputStreamResourceFactory, "inputStreamResourceFactory cannot be null");
 		this.context = checkNotNull(context, "context cannot be null");
 	}
 
@@ -102,7 +104,7 @@ public class DataServiceImpl implements DataService {
 	private Optional<Resource> getResource(final String key) {
 		final Optional<S3Object> object = repository.getObject(key);
 		if (object.isPresent()) {
-			return Optional.of(new InputStreamResource(object.get().getObjectContent()));
+			return Optional.of(inputStreamResourceFactory.create(object.get().getObjectContent()));
 		}
 		LOGGER.debug("No object found for key [{}]", key);
 		return Optional.empty();

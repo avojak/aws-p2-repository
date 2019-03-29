@@ -1,9 +1,6 @@
 package com.avojak.webapp.aws.p2.repository.service.cache;
 
 import com.avojak.webapp.aws.p2.repository.model.project.Project;
-import com.avojak.webapp.aws.p2.repository.service.configuration.ServiceProperties;
-import com.google.common.base.Ticker;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +28,9 @@ public class ProjectCache {
 	private final LoadingCache<Boolean, Map<String, Project>> cache;
 
 	@Autowired
-	public ProjectCache(final ProjectCacheLoader cacheLoader, final Ticker ticker, final ServiceProperties properties) {
-		checkNotNull(cacheLoader, "cacheLoader cannot be null");
-		checkNotNull(ticker, "ticker cannot be null");
-		checkNotNull(properties, "properties cannot be null");
-
-		cache = CacheBuilder.newBuilder()
-				.expireAfterWrite(properties.getCacheExpirationDuration(), properties.getCacheExpirationUnits())
-				.ticker(ticker)
-				.build(cacheLoader);
+	public ProjectCache(final LoadingCacheFactory cacheFactory) {
+		checkNotNull(cacheFactory, "cacheFactory cannot be null");
+		cache = cacheFactory.create();
 	}
 
 	/**
