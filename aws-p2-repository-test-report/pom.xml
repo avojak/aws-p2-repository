@@ -24,6 +24,10 @@
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>${jacoco.version}</version>
                         <configuration>
+                            <excludes>
+                                <!-- Exclude the main class, which is not testable -->
+                                <exclude>**/AWSP2Repository.*</exclude>
+                            </excludes>
                         </configuration>
                         <executions>
                             <execution>

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * The web application properties.
  */
-public class WebappProperties {
+public final class WebappProperties {
 
 	private final String brandName;
 	private final String brandIcon;
@@ -33,8 +33,8 @@ public class WebappProperties {
 	 * @param bucketName
 	 * 		The S3 bucket name.
 	 */
-	WebappProperties(final String brandName, final String brandIcon, final String brandFavicon,
-					 final String customDomain, final String welcomeMessage, final String bucketName) {
+	public WebappProperties(final String brandName, final String brandIcon, final String brandFavicon,
+							final String customDomain, final String welcomeMessage, final String bucketName) {
 		this.brandName = brandName;
 		this.brandIcon = brandIcon;
 		this.brandFavicon = brandFavicon;

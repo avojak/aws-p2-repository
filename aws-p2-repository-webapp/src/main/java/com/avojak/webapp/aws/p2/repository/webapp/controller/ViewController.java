@@ -28,7 +28,9 @@ public class ViewController {
 	 * Constructor.
 	 *
 	 * @param service
-	 * 		The {@link DataService}.
+	 * 		The {@link DataService}. Cannot be null.
+	 * @param properties
+	 * 		The {@link WebappProperties}. Cannot be null.
 	 */
 	@Autowired
 	public ViewController(final DataService service, final WebappProperties properties) {
