@@ -54,7 +54,7 @@
         <!-- Dependency versions -->
         <aws.sdk.version>1.11.343</aws.sdk.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <jackson.version>2.9.7</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
 
         <!-- Plugin versions -->
         <maven.javadoc.version>3.0.0</maven.javadoc.version>
