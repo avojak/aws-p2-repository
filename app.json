@@ -1,16 +1,31 @@
 {
   "name": "aws-p2-repository",
-  "scripts": {
-  },
+  "description": "Web application to host p2 repositories backed by AWS",
   "env": {
+    "AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_SECRET_KEY": {
+      "required": true
+    },
+    "AWS_S3_BUCKET_NAME": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_BRAND_NAME": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_BRAND_ICON": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_BRAND_FAVICON": {
+      "required": true
+    },
+    "AWS_P2_REPO_WEBAPP_CUSTOM_DOMAIN": {
+      "required": true
+    },
+    "P2_INSPECTOR_BASE_URL": {
+      "required": true
+    }
   },
-  "formation": {
-  },
-  "addons": [
-
-  ],
-  "stack": "heroku-18",
-  "buildpacks": [
-
-  ]
+  "addons": []
 }

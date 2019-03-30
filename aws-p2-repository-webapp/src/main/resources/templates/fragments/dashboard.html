@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+<div th:fragment="dashboard" id="" class="my-3 p-3 bg-white rounded box-shadow">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Overview</h6>
+    <div class="text-muted pt-3 pb-3 mb-3">
+        <span class="d-block pb-1">
+            Project repository content is available at:
+            <code th:text="'https://' + ${domain} + '/content/{project}/{snapshots|releases}/{version|latest}'"></code>
+        </span>
+        <span class="d-block pb-1">
+            Serving content from S3 bucket: <strong th:text="${bucket}"></strong>
+        </span>
+    </div>
+    <h6 class="border-bottom border-gray pb-2 mb-0">Statistics</h6>
+    <div class="text-muted pt-3 pb-3 mb-3">
+        <span class="d-block pb-1">
+            Uptime is <span th:text="${uptime.days} + 'd ' + ${uptime.hours} + 'h ' + ${uptime.minutes} + 'm'"></span>
+        </span>
+    </div>
+</div>
+</body>
+</html>

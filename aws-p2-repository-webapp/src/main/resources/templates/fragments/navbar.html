@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="#" th:text="${title}"></a>
+    <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div th:fragment="nav-scroller" class="nav-scroller bg-white box-shadow">
+    <nav class="nav nav-underline">
+        <a class="nav-link active" href="#" onclick="showDashboard(this)">Dashboard</a>
+        <a class="nav-link" href="#" onclick="showProjects(this)">
+            Projects
+        </a>
+    </nav>
+</div>
+</body>
+</html>
