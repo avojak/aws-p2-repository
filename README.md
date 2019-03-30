@@ -1,5 +1,10 @@
 # AWS p2 Repository
 
+[![Build Status](https://travis-ci.org/avojak/aws-p2-repository.svg?branch=master)](https://travis-ci.org/avojak/aws-p2-repository) 
+[![Coverage Status](https://coveralls.io/repos/github/avojak/aws-p2-repository/badge.svg?branch=master)](https://coveralls.io/github/avojak/aws-p2-repository?branch=master)
+[![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/avojak/aws-p2-repository.svg)](https://snyk.io/test/github/avojak/aws-p2-repository)
+[![GitHub](https://img.shields.io/github/license/avojak/aws-p2-repository.svg)](https://github.com/avojak/aws-p2-repository/LICENSE)
+
 Web application to host p2 repositories backed by AWS S3.
 
 ## Getting Started
@@ -17,13 +22,13 @@ What things you need to install the software and how to install them
 
 Package the self-contained JAR:
 
-```
+```console
 $ mvn clean package
 ```
 
 Run the JAR:
 
-```
+```console
 $ java -jar aws-p2-repository-webapp/target/aws-p2-repository-webapp-<version>.jar
 ```
 
@@ -31,22 +36,10 @@ To view, open a web browser and navigate to `localhost:<port>/browse`.
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+To execute all unit tests and perform code coverage analysis, run the following from the root of the project:
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
+```console
+$ mvn clean verify
 ```
 
 ## Deployment
