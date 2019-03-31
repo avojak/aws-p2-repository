@@ -1,5 +1,22 @@
 language: java
 jdk:
   - oraclejdk8
-sudo: false
-script: mvn clean verify coveralls:report
+sudo: required
+services:
+  - docker
+
+before_script:
+  - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+script:
+  - mvn clean verify coveralls:report &&
+    docker build --tag avojak/aws-p2-repository:1.0-SNAPSHOT --tag avojak/aws-p2-repository:latest .
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    docker push avojak/aws-p2-repository:1.0-SNAPSHOT;
+    docker push avojak/aws-p2-repository:latest;
+  on:
+    branch: master
