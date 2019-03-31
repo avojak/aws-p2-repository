@@ -8,7 +8,7 @@ WORKDIR /opt/app/
 RUN apt-get update && apt-get upgrade -y
 
 # Copy the Spring Boot JAR to /opt/app/
-COPY aws-p2-repository-webapp/target/aws-p2-repository-webapp-1.0-SNAPSHOT.jar .
+COPY aws-p2-repository-webapp/target/aws-p2-repository-webapp-1.0.jar .
 
 # Set entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/

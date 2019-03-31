@@ -1,1 +1,1 @@
-web: java -jar aws-p2-repository-webapp/target/aws-p2-repository-webapp-1.0-SNAPSHOT.jar --server.port=${PORT}
+web: java -jar aws-p2-repository-webapp/target/aws-p2-repository-webapp-1.0.jar --server.port=${PORT}
