@@ -10,13 +10,13 @@ before_script:
 
 script:
   - mvn clean verify coveralls:report &&
-    docker build --tag avojak/aws-p2-repository:1.0 --tag avojak/aws-p2-repository:latest .
+    docker build --tag avojak/aws-p2-repository:1.0.1 --tag avojak/aws-p2-repository:latest .
 
 deploy:
   provider: script
   skip_cleanup: true
   script:
-    docker push avojak/aws-p2-repository:1.0;
+    docker push avojak/aws-p2-repository:1.0.1;
     docker push avojak/aws-p2-repository:latest;
   on:
     branch: master
